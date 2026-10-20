@@ -1,11 +1,21 @@
 {
-  "schema_version": 1,
-  "scope": "current_task_user_style_preferences",
+  "schema_version": 2,
+  "scope": "user_style_preferences_with_project_calibration",
   "description": "Agent读取的样式意图，不是build_packaging.py的输入，也不是字体资源或UI单位转换表。",
   "font": {
-    "applies_to": ["ordinary_subtitles", "chapter", "step", "explanation", "comparison", "quote", "emphasis"],
+    "applies_to": [
+      "ordinary_subtitles",
+      "chapter",
+      "step",
+      "explanation",
+      "comparison",
+      "quote",
+      "emphasis"
+    ],
     "preferred_display_name": "新青年体",
-    "alternate_display_names": ["后现代体"],
+    "alternate_display_names": [
+      "后现代体"
+    ],
     "system_default_allowed": false,
     "silent_fallback_allowed": false,
     "native_ui_confirmation_required": true,
@@ -18,36 +28,87 @@
   },
   "ordinary_subtitle_ui": {
     "color_hex": "#FFFFFF",
-    "color_rgb_0_1": [1.0, 1.0, 1.0],
+    "color_rgb_0_1": [
+      1.0,
+      1.0,
+      1.0
+    ],
     "color_policy": "普通字幕保持白色；不得将标题/重点花字黄色套到基础字幕或整条字幕轨。",
-    "size": 13,
+    "size": null,
     "outline_enabled": false,
-    "shadow_percent": 65,
-    "height_percent": 75,
+    "shadow_percent": null,
+    "height_percent": null,
     "native_json_conversion_verified": false,
     "recognition_origin": "jianying_native",
-    "editing_mode": "batch"
+    "editing_mode": "batch",
+    "calibration_required": true,
+    "calibration_policy": "当前明确要求优先；按实际画幅、字形、画面对比、动画极值和原生安全区核对，不自动套用历史项目参数。UI单位与JSON换算另行验证。"
   },
   "emphasis_color": {
     "hex": "#FFF598",
-    "rgb_0_1": [1.0, 0.9607843137254902, 0.596078431372549],
-    "applies_to": ["titles", "emphasis_packaging"],
-    "excluded_from": ["ordinary_subtitles"],
+    "rgb_0_1": [
+      1.0,
+      0.9607843137254902,
+      0.596078431372549
+    ],
+    "applies_to": [
+      "titles",
+      "emphasis_packaging"
+    ],
+    "excluded_from": [
+      "ordinary_subtitles"
+    ],
     "usage": "标题/重点花字的常用强调色，按内容选择；普通字幕固定白色，不套用该黄色。"
   },
   "content_independence": {
-    "reference_scope": ["visual_form", "font_candidate", "color", "visual_hierarchy"],
-    "independently_decide_from_source": ["topic", "duration", "keep_delete", "sequence"],
-    "new_material_order": ["content_plan_with_keep_delete_reasons", "visual_packaging"],
+    "reference_scope": [
+      "visual_form",
+      "font_candidate",
+      "color",
+      "visual_hierarchy"
+    ],
+    "independently_decide_from_source": [
+      "topic",
+      "duration",
+      "keep_delete",
+      "sequence"
+    ],
+    "new_material_order": [
+      "content_plan_with_keep_delete_reasons",
+      "visual_packaging"
+    ],
     "strict_blind_test_claim_allowed_for_current_reference_exposed_run": false,
     "note": "参考成片只提供视觉依据；本轮已看过参考，不能当严格盲测。新素材先独立形成内容方案与留删理由，再进入视觉包装。"
   },
   "native_safe_area_intent": {
-    "menu_path": ["预览右上三横", "安全区"],
-    "required_views": ["抖音预览", "字幕操作安全区"],
-    "text_roles_to_check": ["ordinary_subtitles", "titles", "chapter", "step", "explanation", "comparison", "quote", "emphasis"],
-    "protect_from_platform_ui": ["text", "face", "key_action", "visual_evidence"],
-    "douyin_overlay_regions": ["右侧头像点赞评论收藏转发音乐", "底部标题介绍"],
+    "menu_path": [
+      "预览右上三横",
+      "安全区"
+    ],
+    "required_views": [
+      "抖音预览",
+      "字幕操作安全区"
+    ],
+    "text_roles_to_check": [
+      "ordinary_subtitles",
+      "titles",
+      "chapter",
+      "step",
+      "explanation",
+      "comparison",
+      "quote",
+      "emphasis"
+    ],
+    "protect_from_platform_ui": [
+      "text",
+      "face",
+      "key_action",
+      "visual_evidence"
+    ],
+    "douyin_overlay_regions": [
+      "右侧头像点赞评论收藏转发音乐",
+      "底部标题介绍"
+    ],
     "outer_white_frame_policy": "绝不越过",
     "inner_white_frame_policy": "尽量不越，少量可接受；仍绝不越外框",
     "fixed_canvas_fraction_is_sufficient": false,
@@ -60,5 +121,28 @@
     "visual_matching_allowed": true,
     "exact_font_recovery_from_flattened_mp4_claim_allowed": false,
     "note": "从成片参照辨识标题字形与视觉特征，再在剪映核实真实字体；像素相似不能证明准确字体或资源ID。"
+  },
+  "historical_project_profiles": {
+    "previous_packaging_task": {
+      "usage": "仅复现旧项目；不是跨项目默认",
+      "ui_size": 13,
+      "shadow_percent": 65,
+      "height_percent": 75,
+      "native_json_conversion_verified": false
+    },
+    "L02_accepted_practice": {
+      "usage": "仅复现本案例；迁移时重新校准",
+      "canvas": [
+        3840,
+        2160
+      ],
+      "fps": 30,
+      "font_ui_display_name": "新青年体",
+      "ui_size": 5,
+      "shadow_percent": 90,
+      "height_percent": null,
+      "native_json_conversion_verified": false,
+      "note": "用户认可实际字形、阴影、位置和断行；位置数值与完整字体资源元数据未核实。"
+    }
   }
 }
