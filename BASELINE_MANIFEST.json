@@ -1,0 +1,86 @@
+{
+  "skill": "wenyu-koubo-jianying",
+  "baseline": "pre-course-update",
+  "files": [
+    {
+      "path": "skills/wenyu-koubo-jianying/SKILL.md",
+      "sha256": "437c1ab4a8f2b8d32f0ba674a3e4e54bc3c06aab6bdbc4a97527dc79ef52c383",
+      "bytes": 14294
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/agents/openai.yaml",
+      "sha256": "b92993f5498706af626a09b8b3134a6166aa935bc782ac80753b893edc951050",
+      "bytes": 672
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/config/style-preferences.json",
+      "sha256": "35d97a467d8df80294932e475c3a687abcaf6fbe9d2a30f7b5a6809e3feeb794",
+      "bytes": 3644
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/content-packaging-v2.md",
+      "sha256": "da0b3dd557833137e8c476c71a51a8efd065454d8b99e28bb5fd0ed56a2ff377",
+      "bytes": 6476
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/content-preview.md",
+      "sha256": "96848e5c5a653b9472eaeee9993d4c1cd9049ff8969be1d2721a8a6d3363523f",
+      "bytes": 3340
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/emphasis-packaging.md",
+      "sha256": "d77e9374a42679f7ba62be419fcd30982a0ef7e71f4c28adb1e0622b667bc49c",
+      "bytes": 10532
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/environment-asr.md",
+      "sha256": "acc56bbce23393c843283ad9d4830e14be5d347ec0f7912adace9f9ff6354126",
+      "bytes": 3716
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/native-draft.md",
+      "sha256": "0bab252b3733c5883e0d7c8933b32d5d6adfe0a9fec279f5dbba26c94d916b23",
+      "bytes": 10021
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/native-safe-area.md",
+      "sha256": "dbad14802f9224d99c260329033b6980fcffbbb4cae7c84b1337919d4ab4bd88",
+      "bytes": 2365
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/native-subtitles.md",
+      "sha256": "7502394e35fd624eae0d06bf884991b0ec54d708d886386b389fb1b4b5e1a894",
+      "bytes": 6222
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/plan-and-evidence.md",
+      "sha256": "06995a5669d12d54a32e210e67d36d2b7d4a391e0375f6de7f93d7dc82d3ca82",
+      "bytes": 3218
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/references/speech-cleanup.md",
+      "sha256": "8103df44c2fc3f61f10a1d1c8a940e68bd48f165ffe976ddb2f9732b051cf6e8",
+      "bytes": 3798
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/scripts/audit_plan.py",
+      "sha256": "c115485890e3fa28e3f8fddf6c2ff815c372bbf7ffc681fa7339bd3dfdfbd870",
+      "bytes": 6944
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/scripts/build_packaging.py",
+      "sha256": "c61d74db676fe52ef9fc60eeed335a394f5e70ea8f609fbadda1e5e67ed69f38",
+      "bytes": 30933
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/scripts/preflight.py",
+      "sha256": "4128427cb22683bb24e12dc9cc791261660df8e93fcada9104ccc94e98ff9c8d",
+      "bytes": 5274
+    },
+    {
+      "path": "skills/wenyu-koubo-jianying/scripts/tests/test_packaging.py",
+      "sha256": "6fd7bdb4e1d1a5ba1ac07e3f6d11fd9bdf28e324d43abfe786fad5893a16b56d",
+      "bytes": 16478
+    }
+  ]
+}
