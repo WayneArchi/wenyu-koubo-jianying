@@ -4,24 +4,48 @@
 
 ## 当前版本
 
-此提交保存课程学习改进前的既有 Skill 基线。原有运行规则保持不变；本次同步不代表课程方法已写入，也不代表陌生素材迁移测试通过。
+本仓库先保存课程学习改进前的既有Skill基线。原有运行规则保持不变；同步和安装成功不代表课程方法已合并，也不代表陌生素材迁移测试通过。
 
-## 使用
+## 在另一台Mac上安装
 
-在支持 Agent Skills 的客户端安装本仓库的 `skills/wenyu-koubo-jianying/` 后调用 `$wenyu-koubo-jianying`，提供本次素材和所需交付范围。
+这是私有仓库。先让目标设备具备该GitHub账号的Git访问权限；浏览器登录和Git命令行登录不是同一件事。不要把密钥或token粘贴到聊天或仓库。
 
-## 依赖
+请让目标设备上的Agent执行：
 
-macOS、剪映专业版、Python 3、FFmpeg/FFprobe，以及独立配置的 `volcengine-audio-transcription` 和 `jianying-editor`。按 Skill 引用的方法，还需对应 dbskill 内容工具。此仓库不打包这些组件、媒体工具或凭据；原有复现包中的 dependencies 需在目标机独立安装和核验。安装 Skill 不等于这些执行依赖已具备。
+1. 将本仓库克隆到该设备固定的Skill源目录。已有仓库时先核对来源与本地修改，不另建重复副本。
+2. 在仓库根目录运行 `bash install.sh`。
+3. 核验公共入口、必要的专属入口和引用资源；运行依赖另行检查。
 
-## 安装验证状态
+```bash
+git clone https://github.com/WayneArchi/wenyu-koubo-jianying.git
+cd wenyu-koubo-jianying
+bash install.sh
+```
 
-仓库资源进行静态检查；GitHub 来源的 `npx skills add` 安装尚未验证，不提供已验证安装的承诺。私有仓库下载需要具备访问权限。
+安装复用随仓库保存的dbs-install-skill脚本，公共入口指向本设备的源目录，不包含Mini或T7的固定路径。不要在安装后移动源目录。打开新会话后使用 `$wenyu-koubo-jianying`。
 
-## 版本与回退
+## 更新
 
-在同一仓库维护一个 Skill 名称。先保存基线提交，再在候选分支记录改进；用旧能力回归和陌生素材验证后决定保留。回退规则使用 Git revert 形成新提交，保留历史，不强制覆盖远端。回退 Skill 不会自动回退剪映工程、安装依赖或删除媒体文件。
+在这个固定仓库目录运行：
 
-`BASELINE_MANIFEST.json` 记录这次基线的完整文件清单与校验值。后续改动单独提交并说明验证范围。
+```bash
+bash update.sh
+```
 
-课程视频、练习素材、成片、原始转写、私密测试和密钥均不进入此仓库。字体等配置是旧版状态，不代表跨画幅通用参数。
+更新只接受本仓库的main分支和快进更新；存在本地修改、来源不符或分支不符时停止并保留现场。需要Git具备私有仓库访问权限。源文件更新后公共入口仍指向同一位置，不再重复安装另一份Skill。ZIP下载可以用于临时安装和核对，但需要更新时应使用固定Git克隆目录。
+
+## 修改与回退
+
+所有修改保存在同一仓库，每次变更单独提交。候选改进先测试，通过后再进入main。恢复旧能力使用Git revert形成新提交，不强推、不重写历史。回退Skill不自动改动剪映工程或媒体。
+
+`BASELINE_MANIFEST.json`记录16个原有Skill文件的校验值。字体等配置是旧版状态，不代表跨画幅通用参数。
+
+## 执行依赖
+
+macOS、剪映专业版、Python 3、FFmpeg/FFprobe，以及独立配置的volcengine-audio-transcription、jianying-editor和所需dbskill内容工具。仓库不打包这些执行组件、媒体工具或凭据；旧复现包dependencies需在目标机独立安装核验。安装Skill不等于执行环境已就绪。
+
+## 验证与文件范围
+
+已进行基线结构检查和24项原有脚本测试。GitHub来源的npx安装未验证，本仓库使用上面的Git克隆与安装脚本路径。另一台实体设备尚需实际执行安装核验，不能把Mini上的检查称作MacBook已安装。
+
+tools/dbs-install-skill/scripts中的安装器原样复用本机dbs-install-skill版本。本仓库不包含课程视频、练习素材、成片、原始转写、私密样本和密钥。
