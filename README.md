@@ -46,6 +46,16 @@ macOS、剪映专业版、Python 3、FFmpeg/FFprobe，以及独立配置的volce
 
 ## 验证与文件范围
 
-已进行基线结构检查和24项原有脚本测试。GitHub来源的npx安装未验证，本仓库使用上面的Git克隆与安装脚本路径。另一台实体设备尚需实际执行安装核验，不能把Mini上的检查称作MacBook已安装。
+已进行基线结构检查和24项原有脚本测试；已核对真实GitHub克隆中的16个Skill文件与基线一致。安装入口已在隔离目录执行。GitHub来源的npx安装未验证，本仓库使用上面的Git克隆与安装脚本路径。另一台实体设备尚需实际执行安装核验，不能把Mini上的检查称作MacBook已安装。
 
 tools/dbs-install-skill/scripts中的安装器原样复用本机dbs-install-skill版本。本仓库不包含课程视频、练习素材、成片、原始转写、私密样本和密钥。
+
+## 给另一台设备上的Agent
+
+安装时可以直接发送：
+
+> 请从私有仓库 https://github.com/WayneArchi/wenyu-koubo-jianying 安装wenyu-koubo-jianying。先核验本机GitHub的Git访问权限，将仓库克隆到固定目录，运行bash install.sh并核验入口及引用资源。已有同名Skill时先检查来源和本地改动，不覆盖不同来源；缺运行依赖时继续配置可配置部分并列明剩余项。
+
+更新时可以直接发送：
+
+> 请更新wenyu-koubo-jianying：找到它的固定源仓库，核对远端和本地改动，运行bash update.sh，报告更新前后提交；有本地修改时先保留，不强行覆盖。
