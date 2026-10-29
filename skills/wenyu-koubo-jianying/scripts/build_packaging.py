@@ -112,7 +112,9 @@ def style_for(value, role):
     if not isinstance(value, dict):
         raise PackagingError("style must be an object.")
     check_keys(value, ("size", "color", "bold", "x", "y", "border", "shadow", "font"), "style")
-    result = {"size": 8.0, "color": [1.0, 1.0, 1.0], "bold": role in ("chapter", "emphasis", "step"),
+    if "size" not in value:
+        raise PackagingError("style.size is required; there is no small-font default. Calibrate native size in Jianying: ordinary subtitles UI 12-13, emphasis visibly larger. JSON/UI conversion is not assumed.")
+    result = {"color": [1.0, 1.0, 1.0], "bold": role in ("chapter", "emphasis", "step"),
               "x": 0.0, "y": 0.55, "border": None, "shadow": None, "font": "system"}
     result.update(copy.deepcopy(value))
     if not number(result["size"]) or not 1 <= result["size"] <= 100:
@@ -321,6 +323,7 @@ def validate_packaging(rough_plan, packaging_plan):
             if current["target_start_us"] < previous["target_start_us"] + previous["duration_us"]:
                 raise PackagingError("Texts overlap within the same role/layer track; assign a distinct layer for simultaneous text.")
     return {"valid_structure": True, "ready_for_staging": base["ready_for_native_edit"],
+            "continuity_risks": base["continuity_risks"],
             "readiness_blockers": base["readiness_blockers"], "duration_us": duration,
             "checkpoint_end_us": checkpoint, "stop_at_checkpoint": checkpoint < duration,
             "remaining_packaging_status": "not_started" if checkpoint < duration else "not_applicable",
@@ -516,7 +519,7 @@ def main(argv=None):
             write_staged(args.out, result, args.draft_input)
             report["staged_output"] = str(args.out.expanduser().resolve())
         print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
-        return 0
+        return 0 if report["ready_for_staging"] else 2
     except (PackagingError, ValueError, TypeError) as exc:
         print(json.dumps({"valid_structure": False, "ready_for_staging": False,
                           "errors": [str(exc)], "limitations": LIMITATIONS}, ensure_ascii=False, indent=2))

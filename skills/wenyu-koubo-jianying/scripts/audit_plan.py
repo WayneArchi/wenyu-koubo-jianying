@@ -10,6 +10,39 @@ def integer(value):
     return type(value) is int
 
 
+def continuity_risks(clips):
+    """Flag candidates, not certified defects. Thresholds are review triggers, not cut targets."""
+    risks = []
+    for i, clip in enumerate(clips):
+        start, end = clip["source_start_us"], clip["source_end_us"]
+        words = clip["word_intervals"]
+        text = "".join(c for w in words for c in w["text"] if c.isalnum())
+        reasons = []
+        if len(text) == 1:
+            reasons.append("isolated_single_character")
+        if end - start < 500000:
+            reasons.append("short_speech_fragment")
+        # Source-contiguous clips have no audible jump at this boundary.
+        follows_source = (i + 1 < len(clips) and
+                          clips[i + 1]["source_id"] == clip["source_id"] and
+                          clips[i + 1]["source_start_us"] == end)
+        tail = end - words[-1]["end_us"]
+        if tail < 100000 and not follows_source:
+            reasons.append("tight_tail_candidate")
+        if not reasons:
+            continue
+        review = clip.get("continuity_review", {})
+        reviewed = (isinstance(review, dict) and review.get("listened") is True and
+                    isinstance(review.get("reason"), str) and bool(review["reason"].strip()))
+        # A single character cut out of a longer sentence is not a natural short response.
+        if len(text) == 1:
+            reviewed = reviewed and review.get("independent_utterance") is True
+        risks.append({"clip_index": i, "text": text, "duration_us": end - start,
+                      "tail_margin_us": tail, "reasons": reasons,
+                      "review_claim_received": bool(reviewed)})
+    return risks
+
+
 def audit(plan, require_listening=False):
     errors, blockers = [], []
     if not isinstance(plan, dict):
@@ -107,8 +140,14 @@ def audit(plan, require_listening=False):
     listening = plan.get("full_listening_review") is True
     if require_listening and not listening:
         blockers.append("A full_listening_review claim is required by --require-listening.")
+    risks = continuity_risks(clips) if not errors else []
+    unresolved = [r for r in risks if not r["review_claim_received"]]
+    if unresolved:
+        blockers.append("Unresolved speech continuity risks at clips {}: restore a complete phrase/natural tail, or supply actual per-clip listening evidence; do not just change timestamps or flags.".format(
+            ", ".join(str(r["clip_index"]) for r in unresolved)))
     return {"valid_structure": not errors, "ready_for_native_edit": not errors and not blockers,
             "listening_claim_received": listening, "listening_required": require_listening,
+            "continuity_risks": risks,
             "errors": errors, "readiness_blockers": blockers,
             "limitations": ["Only the supplied intervals and claims were checked; omitted ASR words cannot be detected.",
                             "No audio was heard, cuts created, real phoneme boundaries certified, or quality pass granted.",
