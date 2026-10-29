@@ -25,7 +25,7 @@ def fixtures():
              "approval_reference":"Synthetic claim only","speaker_identity_confirmed":True}
     event = {"id":"e1","role":"emphasis","clip_index":1,"source_start_us":1200000,"source_end_us":2500000,
              "text":"完整例子，支撑观点","evidence_quote":"完整例子支撑观点","reason":"突出论据作用",
-             "highlights":[{"word":"支撑","color":[1,0.3,0.2]}],"motion":"pop"}
+             "style":{"size":18},"highlights":[{"word":"支撑","color":[1,0.3,0.2]}],"motion":"pop"}
     packaging = {"texts":[event]}
     caption = {"id":"native-caption","type":"subtitle","content":json.dumps({"text":"剪映原生识别字幕",
                "styles":[{"range":[0,8],"font":{"id":"known-native-font","path":"/native/cache/font.ttf"}}]}),
@@ -48,10 +48,33 @@ def chapter():
         {"clip_index":0,"source_start_us":5000000,"source_end_us":7000000},
         {"clip_index":1,"source_start_us":1000000,"source_end_us":3000000},
         {"clip_index":2,"source_start_us":1000000,"source_end_us":3000000}],
-        "text":"先给结论，再用例子说明","verbatim":False,"evidence_quote":"先讲结论再给原因", "reason":"持续提示当前章节","motion":"pop"}
+        "style":{"size":18},"text":"先给结论，再用例子说明","verbatim":False,"evidence_quote":"先讲结论再给原因", "reason":"持续提示当前章节","motion":"pop"}
 
 
 class PackagingV2Tests(unittest.TestCase):
+    def test_missing_size_does_not_silently_generate_small_text(self):
+        rough, plan, draft = fixtures()
+        del plan["texts"][0]["style"]
+        with self.assertRaisesRegex(PackagingError, "style.size is required"):
+            build_packaging(rough, plan, draft)
+
+    def test_unresolved_tail_risk_blocks_packaging_and_cli_validation(self):
+        rough, plan, draft = fixtures()
+        rough["clips"][0]["word_intervals"][-1]["end_us"] = 6990000
+        report = validate_packaging(rough, plan)
+        self.assertFalse(report["ready_for_staging"])
+        self.assertEqual(report["continuity_risks"][0]["clip_index"], 0)
+        with self.assertRaisesRegex(PackagingError, "not ready"):
+            build_packaging(rough, plan, draft)
+        with tempfile.TemporaryDirectory() as tmp:
+            d = Path(tmp)
+            (d / "rough.json").write_text(json.dumps(rough))
+            (d / "package.json").write_text(json.dumps(plan))
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(main(["--rough-plan", str(d / "rough.json"),
+                                       "--packaging-plan", str(d / "package.json"),
+                                       "--validate-only"]), 2)
+
     def test_no_plain_text_pseudo_subtitles(self):
         rough, plan, _ = fixtures(); plan["captions"]=[{"text":"普通文字伪字幕"}]
         with self.assertRaisesRegex(PackagingError,"recognize subtitles in Jianying"):
@@ -129,16 +152,16 @@ class PackagingV2Tests(unittest.TestCase):
             self.assertEqual(run["size"],7)
 
     def test_font_copies_only_current_native_metadata_to_each_run(self):
-        rough,plan,draft=fixtures();plan["texts"][0]["style"]={"font":{"from_material_id":"native-caption"}}
+        rough,plan,draft=fixtures();plan["texts"][0]["style"]={"size":18,"font":{"from_material_id":"native-caption"}}
         staged,_=build_packaging(rough,plan,draft)
         for run in json.loads(staged["materials"]["texts"][-1]["content"])["styles"]:
             self.assertEqual(run["font"],{"id":"known-native-font","path":"/native/cache/font.ttf"})
         self.assertEqual(staged["materials"]["texts"][0],draft["materials"]["texts"][0])
 
     def test_placeholder_or_invented_font_is_refused(self):
-        rough,plan,draft=fixtures();plan["texts"][0]["style"]={"font":"凭空字体名"}
+        rough,plan,draft=fixtures();plan["texts"][0]["style"]={"size":18,"font":"凭空字体名"}
         with self.assertRaisesRegex(PackagingError,"font supports"):validate_packaging(rough,plan)
-        plan["texts"][0]["style"]={"font":{"from_material_id":"native-caption"}}
+        plan["texts"][0]["style"]={"size":18,"font":{"from_material_id":"native-caption"}}
         content=json.loads(draft["materials"]["texts"][0]["content"]);content["styles"][0]["font"]["path"]="D:"
         draft["materials"]["texts"][0]["content"]=json.dumps(content)
         with self.assertRaisesRegex(PackagingError,"placeholder"):build_packaging(rough,plan,draft)
