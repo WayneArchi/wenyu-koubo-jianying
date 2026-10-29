@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "scope": "user_style_preferences_with_project_calibration",
   "description": "Agent读取的样式意图，不是build_packaging.py的输入，也不是字体资源或UI单位转换表。",
   "font": {
@@ -34,15 +34,22 @@
       1.0
     ],
     "color_policy": "普通字幕保持白色；不得将标题/重点花字黄色套到基础字幕或整条字幕轨。",
-    "size": null,
+    "size": 13,
     "outline_enabled": false,
     "shadow_percent": null,
-    "height_percent": null,
+    "height_percent": 75,
     "native_json_conversion_verified": false,
     "recognition_origin": "jianying_native",
     "editing_mode": "batch",
     "calibration_required": true,
-    "calibration_policy": "当前明确要求优先；按实际画幅、字形、画面对比、动画极值和原生安全区核对，不自动套用历史项目参数。UI单位与JSON换算另行验证。"
+    "calibration_policy": "剪映界面普通字幕默认13号，合理排版可用12号；长句先按语义合分/换行，不缩小到12以下。更具体的当次用户指令优先。阴影和位置按实际画面及原生安全区核对；UI/JSON换算仍须验证。",
+    "allowed_ui_sizes": [
+      12,
+      13
+    ],
+    "size_source": "用户2026-10-22明确反馈：普通字幕12或13号",
+    "position_anchor": "text_center_from_top_of_video_canvas",
+    "position_source": "用户2026-10-23：距画面底部约四分之一，不是三分之一"
   },
   "emphasis_color": {
     "hex": "#FFF598",
@@ -144,5 +151,13 @@
       "native_json_conversion_verified": false,
       "note": "用户认可实际字形、阴影、位置和断行；位置数值与完整字体资源元数据未核实。"
     }
+  },
+  "emphasis_ui": {
+    "size": null,
+    "visibly_larger_than_ordinary_subtitles": true,
+    "small_default_allowed": false,
+    "size_policy": "用户未指定统一花字号数。逐项在剪映实际预览中设为明显大于12–13号普通字幕的视觉层级；不能沿用7/8号的小花字，也不能靠上移或换颜色冒充强调。过长先忠实缩短强调范围、换行或调布局，保留原话限制。",
+    "native_preview_required": true,
+    "native_json_conversion_verified": false
   }
 }
